@@ -5,6 +5,9 @@ import com.test.service.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterProperties;
 
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,6 +32,9 @@ public class ProfileInfoResource {
 
     @GetMapping("/profile-info")
     public ProfileInfoVM getActiveProfiles() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        Object O = authentication.getPrincipal();
         String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
         return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
     }
